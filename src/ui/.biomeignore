@@ -1,0 +1,16 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+*.min.js
+
+# Type definitions
+*.d.ts
+
+# Yarn
+yarn.lock
+
+# Vite
+vite.config.ts.timestamp-* 

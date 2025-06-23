@@ -1,0 +1,25 @@
+[project]
+name = "backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "boto3>=1.38.41",
+    "dramatiq[redis]>=1.18.0",
+    "fastapi>=0.115.13",
+    "httpx>=0.28.1",
+    "pydantic>=2.11.7",
+    "pydantic-settings>=2.10.0",
+    "redis>=6.2.0",
+    "strawberry-graphql[fastapi]>=0.275.2",
+    "uvicorn[standard]>=0.34.3",
+    "workos>=5.23.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.1",
+    "pytest-asyncio>=1.0.0",
+    "ruff>=0.12.0",
+]
