@@ -1,0 +1,71 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: reading_app_postgres
+    environment:
+      POSTGRES_DB: reading_app
+      POSTGRES_USER: reading_user
+      POSTGRES_PASSWORD: reading_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U reading_user -d reading_app"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: reading_app_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  backend:
+    build:
+      context: ./src/backend
+      dockerfile: Dockerfile
+    container_name: reading_app_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_NAME=Reading App
+      - APP_VERSION=0.1.0
+      - DEBUG=true
+      - ENVIRONMENT=development
+      - DATABASE_URL=postgresql://reading_user:reading_password@postgres:5432/reading_app
+      - REDIS_URL=redis://redis:6379/0
+      - JWT_SECRET_KEY=your-super-secret-jwt-key-change-this-in-production
+      - JWT_ALGORITHM=HS256
+      - JWT_EXPIRE_MINUTES=30
+      - JWT_REFRESH_EXPIRE_MINUTES=10080
+      - PASSWORD_SALT_ROUNDS=12
+      - API_V1_PREFIX=/api/v1
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:5173
+      - LOG_LEVEL=INFO
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    volumes:
+      - ./src/backend:/app
+      - /app/.venv
+
+volumes:
+  postgres_data:
+  redis_data:

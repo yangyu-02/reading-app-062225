@@ -51,10 +51,10 @@ Each app contains: `models.py`, `schemas.py`, `services.py`, `routes.py`
   - [x] SQLAlchemy Core with asyncpg driver
   - [x] Redis for Dramatiq background jobs
   - [x] Email/password authentication (passlib + python-jose)
-- [ ] **Development environment**
-  - [ ] Docker compose for local PostgreSQL + Redis
-  - [ ] Environment variable management with pydantic-settings
-  - [ ] Ruff configuration for linting/formatting
+- [x] **Development environment**
+  - [x] Docker compose for local PostgreSQL + Redis (configured)
+  - [x] Environment variable management with custom settings
+  - [x] Ruff configuration for linting/formatting
 
 #### ✅ Authentication & User Management
 

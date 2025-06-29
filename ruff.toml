@@ -1,0 +1,79 @@
+# Ruff configuration for Reading App backend
+
+# Same as Black
+line-length = 88
+indent-width = 4
+
+target-version = "py313"
+
+[lint]
+# Enable flake8-bugbear (`B`) rules, in addition to the defaults.
+select = [
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # Pyflakes
+    "I",     # isort
+    "B",     # flake8-bugbear
+    "C4",    # flake8-comprehensions
+    "UP",    # pyupgrade
+    "ARG",   # flake8-unused-arguments
+    "SIM",   # flake8-simplify
+    "TCH",   # flake8-type-checking
+    "PTH",   # flake8-use-pathlib
+]
+
+ignore = [
+    "E501",   # Line too long (handled by formatter)
+    "B008",   # Do not perform function calls in argument defaults
+    "SIM102", # Use a single if-statement
+    "SIM108", # Use ternary operator
+    "ARG002", # Unused method argument (common in FastAPI)
+]
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".git",
+    ".mypy_cache",
+    ".ruff_cache",
+    ".tox",
+    ".venv",
+    "__pycache__",
+    "alembic/versions/*.py",  # Skip auto-generated migration files
+]
+
+[lint.per-file-ignores]
+# Tests can use magic values, assertions, etc.
+"tests/**/*.py" = [
+    "S101",   # Use of assert
+    "ARG",    # Unused function args
+    "FBT",    # Boolean trap
+    "PLR2004", # Magic value used in comparison
+    "S311",   # Standard pseudo-random generators not suitable for cryptographic purposes
+]
+
+# Alembic migrations can have unused imports
+"alembic/**/*.py" = ["F401"]
+
+[lint.isort]
+known-first-party = ["apps", "shared", "core"]
+section-order = ["future", "standard-library", "third-party", "first-party", "local-folder"]
+
+[format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+# Enable auto-formatting of code examples in docstrings.
+docstring-code-format = true 
