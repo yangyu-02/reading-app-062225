@@ -9,11 +9,28 @@
 
 ### Key Architectural Decisions
 
-- **Backend:** DDD/Clean Architecture with functional core/imperative shell pattern
+- **Backend:** Multi-app monolith structure (auth, documents, reading, chat apps)
 - **Database:** SQLAlchemy Core (no ORM), Repository + Unit of Work patterns
 - **Frontend:** Hybrid folder structure (features/ + shared/), GraphQL codegen
 - **State:** React state + Apollo cache (no additional state management)
 - **Testing:** Pytest (backend), Vitest + React Testing Library (frontend)
+- **Auth:** Email/password initially, WorkOS integration later
+
+### Backend Folder Structure (Implemented)
+
+```
+src/backend/
+├── apps/
+│   ├── auth/          # Authentication & user management
+│   ├── documents/     # File upload & document processing
+│   ├── reading/       # Reading progress & analytics
+│   └── chat/          # AI chat functionality
+├── shared/            # Cross-app utilities
+├── core/              # App configuration & bootstrap
+└── tests/             # Test organization mirrors apps/
+```
+
+Each app contains: `models.py`, `schemas.py`, `services.py`, `routes.py`
 
 ---
 
@@ -23,15 +40,17 @@
 
 #### ✅ Project Setup & Dependencies
 
-- [ ] **Set up project structure**
-  - [ ] Create domain/, service_layer/, adapters/, entrypoints/ folders
+- [x] **Set up project structure**
+  - [x] Create apps/ (auth, documents, reading, chat) folder structure
+  - [x] Create shared/ utilities and core/ configuration folders
   - [ ] Set up bootstrap.py for dependency injection
   - [ ] Configure alembic for database migrations
-- [ ] **Install & configure core dependencies**
-  - [ ] FastAPI with CORS middleware for frontend
-  - [ ] Strawberry GraphQL with subscriptions support
-  - [ ] SQLAlchemy Core with asyncpg driver
-  - [ ] Redis for Dramatiq background jobs
+- [x] **Install & configure core dependencies**
+  - [x] FastAPI with CORS middleware for frontend
+  - [x] Strawberry GraphQL with subscriptions support
+  - [x] SQLAlchemy Core with asyncpg driver
+  - [x] Redis for Dramatiq background jobs
+  - [x] Email/password authentication (passlib + python-jose)
 - [ ] **Development environment**
   - [ ] Docker compose for local PostgreSQL + Redis
   - [ ] Environment variable management with pydantic-settings
@@ -39,11 +58,15 @@
 
 #### ✅ Authentication & User Management
 
-- [ ] **WorkOS Integration**
+- [ ] **Email/Password Authentication**
+  - [ ] User registration with email validation
+  - [ ] Password hashing with bcrypt
+  - [ ] JWT token generation and validation
+  - [ ] Login/logout endpoints
+- [ ] **WorkOS Integration (Future)**
   - [ ] Set up WorkOS organization and API keys
   - [ ] Create WorkOS authentication adapter
-  - [ ] Implement JWT token validation middleware
-  - [ ] Handle token refresh logic
+  - [ ] Migrate from email/password to WorkOS
 - [ ] **User Domain Models**
   - [ ] User entity in domain layer (pure Python class)
   - [ ] User repository interface (abstract)
